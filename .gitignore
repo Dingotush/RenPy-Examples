@@ -1,7 +1,19 @@
+# Files for git to ignore.
+#
 errors.txt
-game/cache
-game/saves
 log.txt
 traceback.txt
+#
+# Directories for git to ignore.
+#
+game/cache
+game/saves
+game/scrap
+game/tl/french
+#
+# Extensions for git to ignore.
+#
 **.rpyc
+**.rpymc
+**.swp
 
