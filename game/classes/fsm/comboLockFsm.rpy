@@ -27,6 +27,7 @@ init python:
             :param combination: The combination to unlock.
             """
             super(ComboLockFsm, self).__init__('comboLockStates')   # Python 2
+            # super().__init__('comboLockStates')                   # Python 3
             self._combinationM = combination
 
 
