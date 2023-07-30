@@ -11,6 +11,8 @@ label selnBasic:
                 call .cook from seln_basic_cook
             "Dialogue":
                 call .dialogue from seln_basic_dialogue
+            "Random":
+                call .rnd from seln_basic_rnd
             "Variables":
                 call .vars from seln_basic_vars
 
@@ -50,6 +52,19 @@ label .dialogue:
     return
 
 
+label .rnd:
+    $ renpy.dynamic("done")
+    $ done = False
+    while not done:
+        menu:
+            "Choose random example"
+            "Booleans":
+                call exRndBool from seln_basic_rnd_ex_bool
+            "Back":
+                $ done = True
+    return
+
+
 
 label .vars:
     $ renpy.dynamic("done")
@@ -67,5 +82,4 @@ label .vars:
                 call exOldStrFmt from seln_basic_vars_ex_old_str_fmt
             "Back":
                 $ done = True
-
     return
