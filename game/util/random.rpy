@@ -77,17 +77,31 @@ init python:
 
         return result
 
-
     # Call one of the labels from the provided list of labels.
-    # Optionally a list of weights can be provided, one per label.
     #
-label callRndLabel(listLabels, listWeights=None):
+label callRndLabel(listLabels):
     $ renpy.dynamic('pick')
-    $ pick = renpy.random.choices(listLabels, weights=listWeights)[0]
+    $ pick = renpy.random.choice(listLabels)
     if renpy.has_label(pick):
         call expression pick from call_rnd_label_dyn
     else:
         dbg "In callRndLabel: label [pick] does not exist."
+    return
+
+
+
+    # Call one of the labels from the provided list of labels.
+    # Optionally a list of weights can be provided, one per label.
+    #
+    # NOTE: Ren'Py 8+ only!
+    #
+label callRndLabelWeighted(listLabels, listWeights=None):
+    $ renpy.dynamic('pick')
+    $ pick = renpy.random.choices(listLabels, weights=listWeights)[0]
+    if renpy.has_label(pick):
+        call expression pick from call_rnd_label_weighted_dyn
+    else:
+        dbg "In callRndLabelWeighted: label [pick] does not exist."
     return
 
 
