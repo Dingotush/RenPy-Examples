@@ -41,7 +41,6 @@ init python:
             """
             if self.stateName == 'dateFirst':
                 self.stateName = 'notSeen'
-                self.timer = 7
                 del self.timerTrig
             elif self.stateName == 'dateSecond':
                 self.stateName = 'dateFirst'
