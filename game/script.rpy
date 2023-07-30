@@ -2,6 +2,7 @@
 
 
 label start:
+    "Running on [renpy.version_string] and Python [sys.version]"
     call selection from start_selection
     return
 
