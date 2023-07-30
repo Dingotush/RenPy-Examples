@@ -60,6 +60,8 @@ label .rnd:
             "Choose random example"
             "Booleans":
                 call exRndBool from seln_basic_rnd_ex_bool
+            "Integers":
+                call exRndInt from seln_basic_rnd_ex_int
             "Back":
                 $ done = True
     return
