@@ -1,5 +1,5 @@
     #
-    # Basic example selection
+    # Intermediate example selection
     #
 label selnInter:
     $ renpy.dynamic("done")
@@ -16,6 +16,10 @@ label selnInter:
 
     return
 
+
+
+    # Cookbook code.
+    #
 label .cook:
     $ renpy.dynamic("done")
     $ done = False
@@ -30,6 +34,10 @@ label .cook:
                 $ done = True
     return
 
+
+
+    # Finite state machine examples.
+    #
 label .fsm:
     $ renpy.dynamic("done")
     $ done = False
@@ -38,6 +46,8 @@ label .fsm:
             "Choose FSM example"
             "Combination lock":
                 call exBriefcase from seln_inter_fsm_briefcase
+            "Date detector":
+                call exDateDetect from seln_inter_fsm_date_detect
             "Back":
                 $ done = True
     return
