@@ -6,7 +6,7 @@ label selnBasic:
     $ done = False
     while not done:
         menu:
-            "Choose Basic Example"
+            "Choose Basic Category"
             "Cookbook":
                 call .cook from seln_basic_cook
             "Dialogue":
@@ -62,6 +62,10 @@ label .rnd:
                 call exRndBool from seln_basic_rnd_ex_bool
             "Integers":
                 call exRndInt from seln_basic_rnd_ex_int
+            "Choices":
+                call exRndChoice from seln_basic_rnd_ex_choice
+            "Deck":
+                call exRndDeck from seln_basic_rnd_ex_deck
             "Back":
                 $ done = True
     return
