@@ -29,11 +29,52 @@ init python:
         :param sides:   The number of sides on each dice. Default six.
         :param rolls:   How many rolls to make. Default one.
         :param add:     Any additional number to add to the total. Default zero.
+        :return:        The sum of the rolls and add.
         """
         result = add
         for roll in range(rolls):
             result += renpy.random.randint(1, sides)
         return result
+
+
+
+    def rndDraw(drawPile):
+        """
+        Draw a random item from a draw pile. The item is removed from the pile.
+
+        :param drawPile:    A list of items to draw from.
+        :return:            The picked item, or None if the pile is empty.
+        """
+        if not drawPile:
+            pick = None
+        else:
+            pick = renpy.random.choice(drawPile)
+            drawPile.remove(pick)
+        return pick
+
+
+
+    def rndDrawDiscard(drawPile, discardPile):
+        """
+        Draw a random item from a draw pile.
+        
+        The item is immediately placed on the discard pile.
+        If the draw pile is empty the discard pile is moved to the draw pile.
+
+        :param drawPile:    A list of items to draw from.
+        :param discardPile: A list for picked items.
+        :return:            The picked item, or None if both piles are empty
+        """
+        if not drawPile:
+            drawList.extend(discardList)
+            discardList.clear()
+        if not drawPile:
+            pick = None
+        else:
+            pick = renpy.random.choice(drawPile)
+            drawPile.remove(pick)
+            discardPile.append(pick)
+        return pick
 
 
 
@@ -76,6 +117,8 @@ init python:
         usedList.insert(0, result)
 
         return result
+
+
 
     # Call one of the labels from the provided list of labels.
     #
