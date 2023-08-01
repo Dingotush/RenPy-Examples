@@ -6,7 +6,7 @@ default drawPile = ['cat', 'dog', 'ferret', 'goldfish', 'guinea pig', 'hamster']
 default discardPile = []
 
 label exRndDeck:
-    $ renpy.dynamic('done', 'pick', 'drawStr', 'dicardStr', 'peek')
+    $ renpy.dynamic('done', 'pick', 'drawStr', 'dicardStr', 'peek', 'npcs', 'present')
     $ drawPile = ['cat', 'dog', 'ferret', 'goldfish', 'guinea pig', 'hamster']
     $ discardPile.clear()
     # Draw only.
@@ -96,7 +96,22 @@ label exRndDeck:
             "Draw pile now: [drawStr]\nDiscard pile now: [discardStr]"
             "Again":
                 pass
+            "Next example":
+                $ done = True
+
+    # Sampling NPCs.
+    #
+    "Using sample to pick NPCs"
+    $ npcs = ['amanda', 'brian', 'chloe', 'derek', 'emily', 'fredrick']
+    $ done = False
+    while not done:
+        $ present = renpy.random.sample(npcs, 3)
+        $ drawStr = ", ".join(present)
+        menu:
+            "Present: [drawStr]"
+            "Again":
+                pass
             "Done":
                 $ done = True
-                
+
     return
