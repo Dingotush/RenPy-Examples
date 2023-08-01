@@ -66,6 +66,8 @@ label .rnd:
                 call exRndChoice from seln_basic_rnd_ex_choice
             "Deck":
                 call exRndDeck from seln_basic_rnd_ex_deck
+            "Least recently used":
+                call exRndLru from seln_basic_rnd_ex_lru
             "Back":
                 $ done = True
     return
