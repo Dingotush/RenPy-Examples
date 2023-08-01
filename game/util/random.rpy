@@ -112,10 +112,13 @@ init python:
         #
         if result in usedList:
             usedList.remove(result)
-        elif len(usedList) >= usedDepth:
-            usedList.pop()
         usedList.insert(0, result)
-
+        #
+        # Trim the used list to size.
+        #
+        while len(usedList) > usedDepth:
+            usedList.pop()
+        
         return result
 
 
