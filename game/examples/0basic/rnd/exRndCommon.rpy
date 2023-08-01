@@ -8,6 +8,10 @@ label alleyCat:
     "A tomcat jumps out from behind a dumpster arches its back and hisses at you."
     return
 
+label alleyRat:
+    "A rat that was nibbling on a discarded pizza darts under a dumpster."
+    return
+
 label alleyVomit:
     "As you search the alley you narrowly avoid treading in a pool of vomit."
     return
