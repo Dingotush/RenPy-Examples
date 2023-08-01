@@ -78,13 +78,14 @@ init python:
 
 
 
-    def rndPickLru(optionsList, usedList, usedDepth=1):
+    def rndPickLru(optionsList, usedList, usedDepth=1, minOpt=2):
         """
         Pick from a list, but avoid recently used options.
 
         :param optionsList: List of options to pick from.
         :param usedList:    List of recently used options.
         :param usedDepth:   How many used options to ignore.
+        :param minOpt:      Minimum number of options to choose randomly from.
         """
         if usedList is None:
             raise ValueError("usedList cannot be None")
@@ -96,10 +97,10 @@ init python:
         workingList = optionsList.copy()
         #
         # Remove options that have been used recently.
-        # Stop if only one option is left.
+        # Stop if there are only minOpt options left.
         #
         for used in usedList:
-            if len(workingList) <= 1:
+            if len(workingList) <= minOpt:
                 break
             if used in workingList:
                 workingList.remove(used)
@@ -175,9 +176,9 @@ label callRndLabelDeck(drawList, discardList):
     # Call one of the labels from the provided list of labels, avoiding
     # recently used ones.
     #
-label callRndLabelLru(labelList, usedList, usedDepth=1):
+label callRndLabelLru(labelList, usedList, usedDepth=1, minOpt=2):
     $ renpy.dynamic('pick')
-    $ pick = rndPickLru(labelList, usedList, usedDepth)
+    $ pick = rndPickLru(labelList, usedList, usedDepth, minOpt)
     if renpy.has_label(pick):
         call expression pick from call_rnd_label_lru_dyn
     else:
