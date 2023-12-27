@@ -11,6 +11,8 @@ label selection:
                 call selnBasic from selection_basic
             "Intermediate":
                 call selnInter from selection_inter
+            "Advanced":
+                call selnAdv from selection_adv
 
             "Done":
                 $ done = True
