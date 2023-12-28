@@ -3,13 +3,14 @@
 #
 init python:
     class PhoneApp:
-        def __init__(self, name, screenName):
+        def __init__(self, name, screenName, ):
             self._nameM = name
             self._screenNameM = screenName
             # Initialise state.
             self._runningM = False
+            self._byM = None
 
-        def start(self, phone):
+        def start(self, phone, by=None, *args):
             """
             Start this application.
 
@@ -18,6 +19,7 @@ init python:
             Mark running as True.
             """
             self._runningM = True
+            self._byM = by
             return
 
         def stop(self, phone):
@@ -28,6 +30,13 @@ init python:
             """
             self._runningM = False
             return
+
+        def back(self, phone):
+            if self._byM is not None:
+                phone.startApp(self._byM)
+
+        def backActive(self):
+            return self._byM is not None
 
         def isRunning(self):
             return self._runningM
