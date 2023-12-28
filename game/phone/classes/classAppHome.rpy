@@ -4,4 +4,4 @@
 init 1 python:
     class AppHome(PhoneApp):
         def __init__(self):
-            super().__init__('home', 'homeScr')
+            super().__init__('home', 'appHomeScr')
