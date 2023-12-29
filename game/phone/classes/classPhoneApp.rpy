@@ -3,9 +3,10 @@
 #
 init python:
     class PhoneApp:
-        def __init__(self, name, screenName, ):
+        def __init__(self, name, screenName, icon=None):
             self._nameM = name
             self._screenNameM = screenName
+            self._iconM = icon
             # Initialise state.
             self._runningM = False
             self._byM = None
@@ -22,6 +23,13 @@ init python:
             self._byM = by
             return
 
+        def restart(self, phone):
+            """
+            Restart this application.
+            """
+            self._runningM = True
+            return
+
         def stop(self, phone):
             """
             Stop this application.
@@ -33,13 +41,28 @@ init python:
 
         def back(self, phone):
             if self._byM is not None:
-                phone.startApp(self._byM)
+                phone.restartApp(self._byM)
 
         def backActive(self):
             return self._byM is not None
 
+        # ---------------------------------------------------------------------
+        # Accessors
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        def count(self):
+            return 0
+
+        def hasIcon(self):
+            return self._iconM is not None
+
         def isRunning(self):
             return self._runningM
+
+
+        # ---------------------------------------------------------------------
+        # Object methods
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         def __eq__(self, other):
             return self._nameM == other._nameM
