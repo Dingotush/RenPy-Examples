@@ -4,6 +4,11 @@
 init python:
     class Phone:
 
+
+        # ---------------------------------------------------------------------
+        # Constructor
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
         def __init__(self, homeApp, apps, contacts):
             self._homeAppM = homeApp
             self._appsM = apps
@@ -16,6 +21,7 @@ init python:
             self._curAppM = None
             self.appLock = False
             self.closeLock = False
+            self._batteryM = 100
 
         def addContact(self, who, icon=None, history=None, rxSound=None):
             if who not in self._contactsM:
@@ -40,6 +46,11 @@ init python:
 
         def findContact(self, who):
             return self._contactsM.get(who)
+
+
+        # ---------------------------------------------------------------------
+        # Controls
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         def open(self):
             # Ignore if already open.
@@ -75,7 +86,7 @@ init python:
                 self._curAppM.back(self)
 
         def backActive(self):
-            if self._curAppM is not None:
+            if not self.appLock and self._curAppM is not None:
                 return self._curAppM.backActive()
             return False
 
@@ -86,7 +97,7 @@ init python:
             self.startApp(self._homeAppM)
 
         def homeActive(self):
-            return self._curAppM is not self._homeAppM
+            return not self.appLock and self._curAppM is not self._homeAppM
 
         def findApp(self, name):
             for app in apps:
@@ -113,6 +124,53 @@ init python:
                     self._curAppM.stop(self)
                 self._curAppM = app
             self._curAppM.start(self, by, *args)
+
+        def restartApp(self, app):
+            """
+            Restart an application.
+
+            Any current app is stopped, and the new app started.
+
+            :param app:     the new application, or its name
+            :param by:      the starting application
+            """
+            if type(app) is str:
+                app = self.findApp(app)
+            if app is None:
+                return
+            if self._curAppM is not app:
+                if self._curAppM is not None:
+                    # Stop current app.
+                    self._curAppM.stop(self)
+                self._curAppM = app
+            self._curAppM.restart(self)
+
+
+        # ---------------------------------------------------------------------
+        # Accessors
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        @property
+        def app(self):
+            return self._curAppM
+
+        @property
+        def battery(self):
+            """
+            Get the battery level as a percentage 0..100.
+
+            :return:            the battery level
+            """
+            return self._batteryM
+
+        @battery.setter
+        def battery(self, value):
+            """
+            Set the battery level as  percentage 0..100.
+
+            :param value:       the new level
+            """
+            self._batteryM = max(0, min(100, int(round(value))))
 
         @property
         def contentScr(self):
