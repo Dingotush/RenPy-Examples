@@ -17,10 +17,10 @@ transform msgTxAppearTf:
     parallel:
         easein_back 0.5 xoffset 0
 
-screen appMsgDxScr(phone):
+screen appMsgDxScr(phone, app):
     default yadj = ui.adjustment()
     python:
-        contact = phone._curAppM._contactM
+        contact = app._contactM
         if contact.unreadMsg:
             yadj.value = float('inf')
             del contact.unreadMsg
@@ -66,6 +66,7 @@ screen appMsgDxScr(phone):
 
 style msgDxWindow:
     background Solid('#999')
+    xpadding 4
 
 style msgRxFrame:
     background Frame("images/phone/sms-rx-frame.png", 23,23,23,23)

@@ -1,7 +1,7 @@
 #
 #
 #
-screen appContactsScr(phone):
+screen appContactsScr(phone, app):
     frame:
         background Frame("images/phone/wallpaper-lights.jpg")
         vbox:
