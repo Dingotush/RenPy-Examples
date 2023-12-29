@@ -23,20 +23,21 @@ screen phoneScr(phone):
         ypadding 14
         background Frame("images/phone/smartphone-background.png")
         foreground Frame("images/phone/smartphone-foreground.png")
-        side "c b":
-            use expression phone.contentScr pass (phone)
-            side "l c r":
-                xfill True
-                textbutton "Back":
-                    sensitive phone.backActive()
-                    action Function(phone.home)
-                textbutton "Home":
-                    xpos 0.5
-                    xanchor 0.5
-                    sensitive phone.homeActive()
-                    action Function(phone.home)
-                textbutton "Quit":
-                    sensitive phone.closeActive()
-                    action Function(phone.close)
+        if phone.battery:
+            side "c b":
+                use expression phone.contentScr pass (phone, phone.app)
+                side "l c r":
+                    xfill True
+                    textbutton "Back":
+                        sensitive phone.backActive()
+                        action Function(phone.back)
+                    textbutton "Home":
+                        xpos 0.5
+                        xanchor 0.5
+                        sensitive phone.homeActive()
+                        action Function(phone.home)
+                    textbutton "Quit":
+                        sensitive phone.closeActive()
+                        action Function(phone.close)
         
 
