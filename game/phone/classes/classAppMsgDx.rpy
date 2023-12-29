@@ -16,6 +16,4 @@ init 1 python:
             """
             super().start(phone, by, *args)
             self._contactM = contact
-            self._runningM = True
-            self._byM = by
             return
