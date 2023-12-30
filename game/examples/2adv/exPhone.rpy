@@ -30,7 +30,7 @@ label exPhone:
     $ mom.sms("I'm getting really worried now.")
     "More"
     $ mom.sms("Seriously, call me. If you don't I'm coming straight over.")
-    menu:
+    menu (phone, screen="phoneChoiceScr"):
         "How do you reply?"
         "Just getting up":
             $ mom.smsReply("I'm fine, just waking up.")
@@ -42,5 +42,5 @@ label exPhone:
     "Close"
     $ phone.close()
     "Done"
-    hide bg
+    scene black
     return
