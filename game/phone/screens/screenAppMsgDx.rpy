@@ -40,9 +40,9 @@ screen appMsgDxScr(phone, app):
                 # scrollbars "vertical"
                 vbox:
                     xfill True
-                    for msg in contact._historyM:
+                    for msg in contact._msgHistM:
                         $ rx, what = msg
-                        $ last = msg is contact._historyM[-1]
+                        $ last = msg is contact._msgHistM[-1]
                         if rx:
                             frame:
                                 style 'msgRxFrame'
