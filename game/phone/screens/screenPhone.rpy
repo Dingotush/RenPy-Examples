@@ -23,7 +23,7 @@ screen phoneScr(phone):
         ypadding 14
         background Frame("images/phone/smartphone-background.png")
         foreground Frame("images/phone/smartphone-foreground.png")
-        if phone.battery:
+        if phone.hasPower:
             side "c b":
                 use expression phone.contentScr pass (phone, phone.app)
                 side "l c r":
