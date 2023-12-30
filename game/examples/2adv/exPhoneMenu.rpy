@@ -16,6 +16,7 @@ label exPhoneMenu:
     menu (phone, screen="phoneChoiceScr"):
         "What to do? I could text my sister."
         "Nothing":
+            pause 1.0
             "You twiddle your thumbs."
         ".phone":
             "I did a phone thing."
@@ -29,10 +30,21 @@ label exPhoneMenu:
     return
 
 label .sis:
+    $ renpy.dynamic('pc', 'sis')
     $ phone.changeMenuMode()
-    $ sis.smsReply("Hi sis. What's up?")
+    $ pc = phone.msgCharTx("Sis")
+    $ sis = phone.msgCharRx("Sis")
+    window hide
+    pause 1.0
+    pc "Hi sis. What's up?"
+    #$ pc("Hi sis. What's up?")
+    pause 1.0
+    $ sis("Nothing. You?")
+    pause 1.0
+    #sis "Nothing. You?"
+    #$ sis.smsReply("Hi sis. What's up?")
     #"I wonder if she will reply?"
-    pause
-    $ sis.sms("Nothing. You?")
-    pause
+    #pause
+    #$ sis.sms("Nothing. You?")
+    #pause
     return
