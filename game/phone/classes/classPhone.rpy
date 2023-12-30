@@ -2,7 +2,7 @@
 # Model of a phone or similar device.
 #
 
-default phoneList = []
+default phoneList = []          # List of phones needing callbacks
 
 init python:
 
@@ -35,7 +35,9 @@ init python:
     config.mode_callbacks.append(phoneModeCallback)
 
     class Phone:
-
+        """
+        Representation of a smart phone.
+        """
 
         # ---------------------------------------------------------------------
         # Constructor
@@ -56,6 +58,7 @@ init python:
             self._batteryM = 100        # Battery level
             self._chargingM = False     # On charge
             self._powerOnM = False      # Powered on
+            self.timeStr = "00:00"      # Time of day for status line
             self._inRpMenuM = False
             self._menuScannedM = False
             self._phoneItemsM = []
@@ -132,9 +135,9 @@ init python:
             renpy.show_screen('phoneScr', self)
             # Mark as open.
             self._openM = True
-            #renpy.restart_interaction()
-            #renpy.pause(0)
-            self._curAppM.onOpen(self, True)
+            if self.hasPower:
+                renpy.restart_interaction()
+                self._curAppM.onOpen(self, True)
 
         def close(self):
             # Ignore if already closed.
@@ -196,7 +199,9 @@ init python:
                     self._curAppM.stop(self)
                 self._curAppM = app
             self._curAppM.start(self, by, *args)
-            self._curAppM.onOpen(self)
+            if self._openM and self.hasPower:
+                renpy.restart_interaction()
+                self._curAppM.onOpen(self)
 
         def restartApp(self, app):
             """
@@ -216,7 +221,9 @@ init python:
                     self._curAppM.stop(self)
                 self._curAppM = app
             self._curAppM.restart(self)
-            self._curAppM.onOpen(self)
+            if self._openM and self.hasPower:
+                renpy.restart_interaction()
+                self._curAppM.onOpen(self)
 
         def powerOff(self):
             """
@@ -311,9 +318,11 @@ init python:
         # Choice menu interaction and callback
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-        def changeMenuMode(self, menuMode):
+        def changeMenuMode(self, menuMode=False):
             """
             Called when Ren'Py's mode changes to and from "menu".
+
+            :param menuMode:    True if i a choice menu
             """
             if not menuMode:
                 self._menuScannedM = False
@@ -334,6 +343,14 @@ init python:
             self._menuScannedM = True
 
         def getMenuResponse(self, caption):
+            """
+            Get any action caught for a given phone caption.
+
+            Actions are usually of type ChoiceAction.
+
+            :param caption:     The caption. Eg. ".phone.abc.xyz"
+            :return:            The action or None
+            """
             if not self._inRpMenuM:
                 return None
             for item in self._phoneItemsM:
