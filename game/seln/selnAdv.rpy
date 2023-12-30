@@ -8,7 +8,9 @@ label selnAdv:
         menu:
             "Choose Advanced Example"
             "Phone":
-                call exPhone from seln_adv_fsm
+                call exPhone from seln_adv_phone
+            "Phone Menu":
+                call exPhoneMenu from seln_adv_phone_menu
             "Back":
                 $ done = True
 
