@@ -4,37 +4,40 @@
 screen appMsgListScr(phone, app):
     window id "phoneApp":
         style 'msgListWindow'
-        vbox:
+        side "t":
             xfill True
             yfill True
-            hbox:
+            vbox:
                 xfill True
-                text _("Messages"):
-                    style 'msgListTitle'
-            vpgrid:
-                cols 1
-                spacing 5
-                draggable True
-                mousewheel True
-                # scrollbars "vertical"
-                xfill True
-                ypos 0.0
-                yanchor 0.0
                 # yfill True
-                for who, contact in app.msgList():
-                    if contact.unreadMsg:
-                        side "c r":
+                hbox:
+                    xfill True
+                    text _("Messages"):
+                        style 'msgListTitle'
+                vpgrid:
+                    cols 1
+                    spacing 5
+                    draggable True
+                    mousewheel True
+                    # scrollbars "vertical"
+                    xfill True
+                    ypos 0.0
+                    yanchor 0.0
+                    # yfill True
+                    for who, contact in app.msgList():
+                        if contact.unreadMsg:
+                            side "c r":
+                                textbutton who:
+                                    xfill True
+                                    style 'msgListTextButton'
+                                    action Function(phone.startApp, 'msgDx', 'msgList', contact)
+                                text str(contact.unreadMsg):
+                                    color '#f40'
+                        else:
                             textbutton who:
                                 xfill True
                                 style 'msgListTextButton'
                                 action Function(phone.startApp, 'msgDx', 'msgList', contact)
-                            text str(contact.unreadMsg):
-                                color '#f40'
-                    else:
-                        textbutton who:
-                            xfill True
-                            style 'msgListTextButton'
-                            action Function(phone.startApp, 'msgDx', 'msgList', contact)
 
 
 
