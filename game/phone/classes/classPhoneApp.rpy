@@ -3,13 +3,28 @@
 #
 init python:
     class PhoneApp:
+
+        # ---------------------------------------------------------------------
+        # Construction
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         def __init__(self, name, screenName, icon=None):
+            """
+            Initialise an application.
+
+            :param name:        the name of the application
+            :param screenName:  the name of the screen used by this application
+            :param icon:        the name of the icon image (optional)
+            """
             self._nameM = name
             self._screenNameM = screenName
             self._iconM = icon
             # Initialise state.
             self._runningM = False
             self._byM = None
+
+        # ---------------------------------------------------------------------
+        # Controls
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         def start(self, phone, by=None, *args):
             """
@@ -30,6 +45,16 @@ init python:
             self._runningM = True
             return
 
+        def onOpen(self, phone, phoneOpen=False):
+            """
+            Called after the corresponding screen for this app has been switched
+            to.
+
+            :param phone:       the phone
+            :param phoneOpen:   True if the phone screen itself just opened
+            """
+            pass
+
         def stop(self, phone):
             """
             Stop this application.
@@ -37,6 +62,24 @@ init python:
             Mark running as False.
             """
             self._runningM = False
+
+        def onClose(self, phone):
+            """
+            Called when the phone screen is dismissed.
+
+            :param phone:       the phone
+            """
+            pass
+
+        def onPowerOff(self, phone):
+            """
+            Called when phone is being turned off.
+            Release all resources and clear all state.
+
+            :param phone:       the phone
+            """
+            self._runningM = False
+            self._byM = None
             return
 
         def back(self, phone):
