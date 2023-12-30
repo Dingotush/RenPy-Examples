@@ -53,7 +53,7 @@ init python:
             :param phone:       the phone
             :param phoneOpen:   True if the phone screen itself just opened
             """
-            pass
+            print(f"{self._nameM}.onOpen")
 
         def stop(self, phone):
             """
