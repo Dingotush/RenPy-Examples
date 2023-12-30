@@ -1,6 +1,15 @@
 #
 # Choice screen that works with the phone.
 #
+# Choices move to the right when phone is open.
+# Captions beginning with ".phone" are absorbed by the phone and enable actions
+# within its screens.
+# Supports making entries insensitive by item kwargs.
+#
+# See: https://patreon.renpy.org/menu-arguments.html
+# See: renpy/exports.py:MenuEntry
+# See: renpy/ui.py:ChoiceActionBase
+#
 screen phoneChoiceScr(phone, items):
     if phone.isOpen:
         style_prefix "pchoicer"
@@ -14,7 +23,7 @@ screen phoneChoiceScr(phone, items):
             if not item.caption.startswith('.phone'):
                 textbutton item.caption:
                     action item.action
-                    sensitive item.kwargs.get("sensitive", True)
+                    sensitive item.kwargs.get("sensitive", True) and item.action.get_sensitive()
 
 style pchoice_vbox is vbox
 style pchoice_button is button
