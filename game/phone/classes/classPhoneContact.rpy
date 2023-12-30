@@ -3,10 +3,10 @@
 #
 init python:
     class PhoneContact:
-        def __init__(self, who, icon, history, rxSound=None):
+        def __init__(self, who, icon, msgHist, rxSound=None):
             self._whoM = who
             self.icon = icon
-            self._historyM = history
+            self._msgHistM = msgHist
             self.rxSound = rxSound
             self._unreadM = 0
             self.rx = True
@@ -14,12 +14,12 @@ init python:
 
         def sms(self, what):
             post = (True, what)
-            self._historyM.append(post)
+            self._msgHistM.append(post)
             self._unreadM += 1
 
         def smsReply(self, what):
             post = (False, what)
-            self._historyM.append(post)
+            self._msgHistM.append(post)
             self._unreadM += 1
 
         @property
