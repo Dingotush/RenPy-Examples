@@ -24,9 +24,12 @@ screen appMsgDxScr(phone, app):
         if contact.unreadMsg:
             yadj.value = float('inf')
             del contact.unreadMsg
+        menuResponse = app.getMenuResponse(phone)
     window id "phoneApp":
         style 'msgDxWindow'
-        vbox:
+        side "t c b":
+            xfill True
+            yfill True
             hbox:
                 xfill True
                 text contact._whoM:
@@ -61,6 +64,15 @@ screen appMsgDxScr(phone, app):
                                 else:
                                     text what:
                                         style 'msgDxText'
+            if menuResponse:
+                textbutton "Send":
+                    xanchor 1.0
+                    xpos 1.0
+                    action menuResponse
+            else:
+                #null height 1
+                text "caption: [app._menuCaptionM]"
+                    
 
 
 
