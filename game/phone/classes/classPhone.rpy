@@ -238,6 +238,32 @@ init python:
                 app.onPowerOff(self)
 
         # ---------------------------------------------------------------------
+        # Message system characters
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        def msgCharRx(self, contact):
+            """
+            Get a character that the phone owner can receive messages from.
+
+            :param contact:     Either a contact or the who name of a contact
+            :return:            A character that can be used to "say" things
+            """
+            if type(contact) is str:
+                contact = self.findContact(contact)
+            return PhoneMsgCharacter(phone, contact, True)
+
+        def msgCharTx(self, contact):
+            """
+            Get a character that the phone owner can send messages to.
+
+            :param contact:     Either a contact or the who name of a contact
+            :return:            A character that can be used to "say" things
+            """
+            if type(contact) is str:
+                contact = self.findContact(contact)
+            return PhoneMsgCharacter(phone, contact, False)
+
+        # ---------------------------------------------------------------------
         # Accessors
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
