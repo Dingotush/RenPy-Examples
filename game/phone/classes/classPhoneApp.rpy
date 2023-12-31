@@ -69,7 +69,7 @@ init python:
 
             :param phone:       the phone
             """
-            pass
+            return
 
         def onPowerOff(self, phone):
             """
@@ -80,6 +80,14 @@ init python:
             """
             self._runningM = False
             self._byM = None
+            return
+
+        def onConnect(self, phone):
+            """
+            Called when phone reconnects to the network.
+
+            :param phone:       the phone
+            """
             return
 
         def back(self, phone):
