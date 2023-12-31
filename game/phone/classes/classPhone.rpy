@@ -50,6 +50,11 @@ init python:
             # Init apps list.
             if not homeApp in apps:
                 self._appsM.append(homeApp)
+            # Owner.
+            self._ownerM = None         # Owner's own contact details.
+            # Msg system.
+            self.msgRxSound = "audio/phone/msg-rx.ogg"
+            self.msgTxSound = "audio/phone/msg-tx.ogg"
             # Init state.
             self._openM = False         # Phone screen is open
             self._curAppM = None        # Current application object
@@ -58,10 +63,12 @@ init python:
             self._batteryM = 100        # Battery level
             self._chargingM = False     # On charge
             self._powerOnM = False      # Powered on
+            self._signalM = 100         # Signal strength
             self.timeStr = "00:00"      # Time of day for status line
-            self._inRpMenuM = False
-            self._menuScannedM = False
-            self._phoneItemsM = []
+            # Menu interactions.
+            self._inRpMenuM = False     # Choice menu active
+            self._menuScannedM = False  # Choice menu entries were scanned
+            self._phoneItemsM = []      # Collected phone caption, action pairs
             # Register phone for filtered Ren'Py mode callbacks.
             phoneList.append(self)
 
@@ -71,40 +78,39 @@ init python:
         # Contacts
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-        def addContact(self, who, icon=None, history=None, msgRxSound=None):
+        def addContact(self, who, icon=None, history=None):
             """
             Add a new contact.
 
             :param who:         The contact's name
             :param icon:        The contact's icon, default None
             :param msgHist:     The message history, default None
-            :param msgRxSound:  The sound to play when a message is received
             :return:            The contact
             """
             if who not in self._contactsM:
                 if history is None:
                     history = []
-                contact = PhoneContact(who, icon, history, msgRxSound)
+                contact = PhoneContact(self, who, icon, history)
                 self._contactsM[who] = contact
             else:
                 contact = findContact(who)
             return contact
 
-        def addContactOwner(self, who, icon=None, history=None, rxSound=None):
+        def addContactOwner(self, who, icon=None, history=None):
             """
             Add a contact for the phone's owner.
 
             :param who:         The contact's name
             :param icon:        The contact's icon, default None
             :param msgHist:     The message history, default None
-            :param msgRxSound:  The sound to play when a message is received
             :return:            The contact
             """
             if who not in self._contactsM:
                 if history is None:
                     history = []
-                contact = PhoneContact(who, icon, history, rxSound)
+                contact = PhoneContact(self, who, icon, history)
                 contact.rx = False
+                self._ownerM = contact
                 self._contactsM[who] = contact
             else:
                 contact = findContact(who)
@@ -128,8 +134,18 @@ init python:
             # Ignore if already open.
             if self._openM:
                 return
-            # Select home screen if needed.
-            if self._curAppM is None or not self._curAppM.isRunning():
+            # Booting?
+            boot = self.hasPower and not self._powerOnM
+            if boot:
+                # Show boot screen it available.
+                self._curAppM = None
+                self.startApp('boot')
+                # Otherwise straight to home screen.
+                if not self._curAppM:
+                    self.home()
+                # Connect to network.
+                self.connect()
+            elif self._curAppM is None or not self._curAppM.isRunning():
                 self.home()
             # Show and transition.
             renpy.show_screen('phoneScr', self)
@@ -237,6 +253,15 @@ init python:
             for app in self._appsM:
                 app.onPowerOff(self)
 
+        def connect(self):
+            """
+            Phone reconnecting to the network.
+            """
+            for contact in self._contactsM.values():
+                contact.onConnect(self)
+            for app in self._appsM:
+                app.onConnect(self)
+
         # ---------------------------------------------------------------------
         # Message system characters
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -262,6 +287,14 @@ init python:
             if type(contact) is str:
                 contact = self.findContact(contact)
             return PhoneMsgCharacter(phone, contact, False)
+
+        def playMsgRxSound(self):
+            if self.msgRxSound:
+                renpy.sound.play(self.msgRxSound)
+
+        def playMsgTxSound(self):
+            if self.msgTxSound:
+                renpy.sound.play(self.msgTxSound)
 
         # ---------------------------------------------------------------------
         # Accessors
@@ -294,7 +327,7 @@ init python:
             """
             self._batteryM = max(0, min(100, int(round(value))))
             if not self.hasPower:
-                self.powerOff
+                self.powerOff()
 
         @property
         def charging(self):
@@ -304,7 +337,7 @@ init python:
         def charging(self, value):
             self._chargingM = value
             if not self.hasPower:
-                self.powerOff
+                self.powerOff()
 
         @property
         def contentScr(self):
@@ -318,6 +351,15 @@ init python:
         @property
         def hasPower(self):
             return self._chargingM or self._batteryM
+
+        @property
+        def hasSignal(self):
+            """
+            Does the phone have a connection to the network?
+
+            :return:            True if it does
+            """
+            return self._signalM and self.hasPower
 
         @property
         def isOpen(self):
@@ -337,6 +379,22 @@ init python:
             :return:            True if phone is ready to scan menu items
             """
             return not self._menuScannedM
+
+        @property
+        def signal(self):
+            return self._signalM
+
+        @signal.setter
+        def signal(self, value):
+            """
+            Set the signal level as  percentage 0..100.
+
+            :param value:       the new level
+            """
+            connected = self.hasSignal
+            self._signalM = max(0, min(100, int(round(value))))
+            if not connected and self.hasSignal:
+                self.connect()
 
 
 
