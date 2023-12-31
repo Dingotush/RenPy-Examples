@@ -23,7 +23,7 @@ screen appMsgDxScr(phone, app):
         contact = app._contactM
         if contact.unreadMsg:
             yadj.value = float('inf')
-            del contact.unreadMsg
+            contact.msgSeeAll()
         menuResponse = app.getMenuResponse(phone)
     window id "phoneApp":
         style 'msgDxWindow'
@@ -44,25 +44,24 @@ screen appMsgDxScr(phone, app):
                 vbox:
                     xfill True
                     for msg in contact._msgHistM:
-                        $ rx, what = msg
                         $ last = msg is contact._msgHistM[-1]
-                        if rx:
+                        if msg.rx:
                             frame:
                                 style 'msgRxFrame'
                                 if last:
-                                    text what at msgRxAppearTf:
+                                    text msg.what at msgRxAppearTf:
                                         style 'msgDxText'
                                 else:
-                                    text what:
+                                    text msg.what:
                                         style 'msgDxText'
                         else:
                             frame:
                                 style 'msgTxFrame'
                                 if last:
-                                    text what at msgTxAppearTf:
+                                    text msg.what at msgTxAppearTf:
                                         style 'msgDxText'
                                 else:
-                                    text what:
+                                    text msg.what:
                                         style 'msgDxText'
             if menuResponse:
                 textbutton "Send":
@@ -70,11 +69,8 @@ screen appMsgDxScr(phone, app):
                     xpos 1.0
                     action menuResponse
             else:
-                #null height 1
-                text "caption: [app._menuCaptionM]"
-                    
-
-
+                null height 1
+                #text "caption: [app._menuCaptionM]"
 
 style msgDxWindow:
     background Solid('#999')
