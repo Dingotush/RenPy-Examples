@@ -97,12 +97,17 @@ init python:
         def backActive(self):
             return self._byM is not None
 
+
+
         # ---------------------------------------------------------------------
         # Accessors
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         def count(self):
             return 0
+
+        def getStatusImg(self):
+            return None
 
         def hasIcon(self):
             return self._iconM is not None
