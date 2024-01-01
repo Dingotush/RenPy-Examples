@@ -19,6 +19,9 @@ init python:
 
 
         def __str__(self):
+            """
+            Generate a string representation: the contact's name.
+            """
             who = self._contactM._whoM
             result = renpy.substitutions.substitute(who)[0]
             if PY2:
@@ -31,9 +34,13 @@ init python:
             """
             Say something on the phone message system.
 
+            This allows these objects to be used in the usual Ren'Py say syntax.
+            Messages sent while the phone is powered off or has no signal are
+            queued for delivery when those conditions are not true.
+
             See: renpy/exports.py:say(who, what, *args, **kwargs)
 
-            :param what:
+            :param what:        What to say
             :param args:
             :param kwargs:
             """
@@ -87,8 +94,14 @@ init python:
             renpy.pause(1.2)
             return True
 
-        def closeMsgSystem(self):
+        def closeMsgSystem(self, closePhone=True):
+            """
+            Close the messaging system.
+
+            :param closePhone:  True to also close the phone
+            """
             self._phoneM.appLock = False
-            self._phoneM.close()
+            if closePhone:
+                self._phoneM.close()
 
             
