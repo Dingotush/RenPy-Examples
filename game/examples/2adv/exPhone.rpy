@@ -8,9 +8,9 @@ label exPhone:
     $ apps.append(AppMsgDx())
     $ contacts = {}
     $ phone = Phone(appHome, apps, contacts)
+    $ me = phone.addContactOwner("Me")
     $ mom = phone.addContact("Mom")
     $ sis = phone.addContact("Sis")
-    $ me = phone.addContactOwner("Me")
     scene bg village
     "Open"
     $ phone.open()
