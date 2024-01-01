@@ -15,6 +15,8 @@ screen phoneStatusScr(phone):
                 null width 4
                 if phone.timeStr:
                     text phone.timeStr
+                for img in phone.statusImgs:
+                    image img
             hbox:
                 image phone.signalImg
                 image phone.batteryImg
