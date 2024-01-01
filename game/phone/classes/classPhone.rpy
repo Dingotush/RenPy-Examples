@@ -330,6 +330,20 @@ init python:
                 self.powerOff()
 
         @property
+        def batteryImg(self):
+            if self._chargingM:
+                result = "chg"
+            elif self._batteryM == 0:
+                result = "0"
+            else:
+                result = str((self._batteryM + 19) // 20)
+            return "images/phone/icons/battery-{}.png".format(result)
+
+        @property
+        def batteryStr(self):
+            return "{}%".format(self._batteryM)
+
+        @property
         def charging(self):
             return self._chargingM
 
@@ -383,6 +397,14 @@ init python:
         @property
         def signal(self):
             return self._signalM
+
+        @property
+        def signalImg(self):
+            if self._signalM == 0:
+                result = "0"
+            else:
+                result = str((self._signalM + 19) // 20)
+            return "images/phone/icons/signal-{}.png".format(result)
 
         @signal.setter
         def signal(self, value):
