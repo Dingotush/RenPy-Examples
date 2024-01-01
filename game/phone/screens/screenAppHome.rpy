@@ -4,9 +4,12 @@
 screen appHomeScr(phone, app):
     frame:
         background Frame("images/phone/wallpaper-lights.jpg")
-        side "t":
+        xpadding 0
+        ypadding 0
+        side "t c":
             xfill True
             yfill True
+            use phoneStatusScr(phone)
             vbox:
                 xfill True
                 yfill True
