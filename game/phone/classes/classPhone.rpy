@@ -418,6 +418,15 @@ init python:
             if not connected and self.hasSignal:
                 self.connect()
 
+        @property
+        def statusImgs(self):
+            result = []
+            for app in self._appsM:
+                img = app.getStatusImg()
+                if img is not None:
+                    result.append(img)
+            return result
+
 
 
         # ---------------------------------------------------------------------
