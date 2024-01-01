@@ -5,6 +5,11 @@ init 1 python:
     class AppMsgList(PhoneApp):
         def __init__(self):
             super().__init__('msgList', 'appMsgListScr', 'icon-msg-%s-40x40')
+            self._contactsM = None
+
+        # ---------------------------------------------------------------------
+        # Overridden methods of PhoneApp
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         def start(self, phone, by=None, *args):
             """
@@ -25,6 +30,10 @@ init 1 python:
                 return
             phone.startApp('msgDx', self, contact)
 
+        def getStatusImg(self):
+            if self.hasAnyUnseen:
+                return "images/phone/icons/status-msg.png"
+            return None
 
         def msgList(self):
             result = []
@@ -33,3 +42,17 @@ init 1 python:
                 if contact.rx:
                     result.append((who, contact))
             return result
+
+        # ---------------------------------------------------------------------
+        # Accessors
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        @property
+        def hasAnyUnseen(self):
+            if self._contactsM is None:
+                return False
+            for contact in self._contactsM.values():
+                if contact.unreadMsg:
+                    return True
+            return False
+
