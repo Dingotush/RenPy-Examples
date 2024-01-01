@@ -7,17 +7,16 @@ label exPhoneMenu:
     $ apps.append(AppMsgDx())
     $ contacts = {}
     $ phone = Phone(appHome, apps, contacts)
+    $ me = phone.addContactOwner("Me")
     $ mom = phone.addContact("Mom")
     $ sis = phone.addContact("Sis")
-    $ me = phone.addContactOwner("Me")
     scene bg village
     show screen phoneButtonScr(phone)
     "Tum-ti-tum"
     menu (phone, screen="phoneChoiceScr"):
         "What to do? I could text my sister."
-        "Nothing":
-            pause 1.0
-            "You twiddle your thumbs."
+        "No, she's probably busy.":
+            call .mom
         ".phone":
             "I did a phone thing."
         ".phone.msg.Sis":
@@ -34,17 +33,27 @@ label .sis:
     $ phone.changeMenuMode()
     $ pc = phone.msgCharTx("Sis")
     $ sis = phone.msgCharRx("Sis")
-    window hide
-    pause 1.0
+    pause 0.1
     pc "Hi sis. What's up?"
-    #$ pc("Hi sis. What's up?")
-    pause 1.0
-    $ sis("Nothing. You?")
-    pause 1.0
-    #sis "Nothing. You?"
-    #$ sis.smsReply("Hi sis. What's up?")
-    #"I wonder if she will reply?"
-    #pause
-    #$ sis.sms("Nothing. You?")
-    #pause
+    sis "Nothing. You?"
     return
+
+label .mom:
+    $ renpy.dynamic('pc', 'mom')
+    $ pc = phone.msgCharTx("Mom")
+    $ mom = phone.msgCharRx("Mom")
+    "I guess I should start cleaning the kitchen. Joy."
+    $ mom.openMsgSystem()
+    mom "Do you still have my casserole dish?"
+    pc "I was just about to clean it when you messaged me."
+    mom "Oh, that's good."
+    $ mom.closeMsgSystem()
+    "
+    You start to run the hot water into the sink.
+    "
+    $ mom.openMsgSystem()
+    mom "Only I'll need it for the dinner party tonight."
+    pc "Fine, I'll bring it over as soon as it's clean."
+    $ mom.closeMsgSystem()
+    return
+
