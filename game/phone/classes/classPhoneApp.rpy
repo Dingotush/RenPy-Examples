@@ -22,9 +22,20 @@ init python:
             self._runningM = False
             self._byM = None
 
+
+
         # ---------------------------------------------------------------------
-        # Controls
+        # Lifecycle
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        def register(self, phone):
+            """
+            Called when this app is added to the phone. Override for any app
+            specific initialisation.
+
+            :param phone:       the phone
+            """
+            return
 
         def start(self, phone, by=None, *args):
             """
@@ -54,6 +65,7 @@ init python:
             :param phoneOpen:   True if the phone screen itself just opened
             """
             print(f"{self._nameM}.onOpen")
+            return
 
         def stop(self, phone):
             """
