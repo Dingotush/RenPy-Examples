@@ -10,10 +10,10 @@ screen appHomeScr(phone, app):
             xfill True
             yfill True
             use phoneStatusScr(phone)
-            vbox:
+            frame:
+                background None
+                xpadding 4
                 xfill True
-                yfill True
-                text "Home Screen"
                 vpgrid:
                     cols 4
                     spacing 5
