@@ -50,6 +50,8 @@ init python:
             # Init apps list.
             if not homeApp in apps:
                 self._appsM.append(homeApp)
+            for app in self._appsM:
+                app.register(self)
             # Owner.
             self._ownerM = None         # Owner's own contact details.
             # Msg system.
@@ -170,7 +172,7 @@ init python:
             self._openM = False
         
         def closeActive(self):
-            return not self.appLock or self.closeLock
+            return not self.appLock and not self.closeLock
 
         def back(self):
             if self._curAppM is not None:
