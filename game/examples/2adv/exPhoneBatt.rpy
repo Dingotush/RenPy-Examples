@@ -13,6 +13,7 @@ label exPhoneBattery:
     scene bg village
     $ phone.battery = 0
     $ phone.open()
+    $ phone.closeLock=True
     "I better put my phone on to charge."
     $ phone.charging = True
     $ phone.battery = 33
@@ -37,6 +38,7 @@ label exPhoneBattery:
     $ phone.battery = 0
     "And it's gone!"
     "Done."
+    $ phone.closeLock=False
     $ phone.close()
     hide screen phoneButtonScr
     pause 0.5
