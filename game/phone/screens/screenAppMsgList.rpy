@@ -4,27 +4,23 @@
 screen appMsgListScr(phone, app):
     window id "phoneApp":
         style 'msgListWindow'
-        side "t":
+        side "t c":
             xfill True
             yfill True
-            vbox:
+            text _("Messages"):
+                style 'phoneAppTitleText'
+            viewport:
                 xfill True
-                # yfill True
-                hbox:
+                yfill True
+                draggable True
+                mousewheel True
+                vbox:
                     xfill True
-                    text _("Messages"):
-                        style 'msgListTitle'
-                vpgrid:
-                    cols 1
-                    spacing 5
-                    draggable True
-                    mousewheel True
-                    # scrollbars "vertical"
-                    xfill True
-                    ypos 0.0
-                    yanchor 0.0
-                    # yfill True
-                    for who, contact in app.msgList():
+                    
+                    for entry in app.msgList():
+                        $ print("Entry: {}".format(entry))
+                        $ who, contact = entry
+                        $ print("who \"{}\" count {}".format(who, contact.unreadMsg))
                         if contact.unreadMsg:
                             side "c r":
                                 textbutton who:
