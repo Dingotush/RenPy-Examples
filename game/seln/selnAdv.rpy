@@ -13,6 +13,8 @@ label selnAdv:
                 call exPhoneMenu from seln_adv_phone_menu
             "Phone Battery":
                 call exPhoneBattery from seln_adv_phone_battery
+            "Phone Signal":
+                call exPhoneSignal from seln_adv_phone_signal
             "Back":
                 $ done = True
 
