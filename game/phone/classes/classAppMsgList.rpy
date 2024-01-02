@@ -11,6 +11,15 @@ init 1 python:
         # Overridden methods of PhoneApp
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+        def register(self, phone):
+            """
+            Register this application: need a reference to contacts.
+
+            :param phone:       the phone
+            """
+            self._contactsM = phone._contactsM
+            return
+
         def start(self, phone, by=None, *args):
             """
             Start this application.
@@ -20,7 +29,6 @@ init 1 python:
             Mark running as True.
             """
             super().start(phone, by, *args)
-            self._contactsM = phone._contactsM
             return
 
         def launchMsg(self, phone, contact):
@@ -36,11 +44,14 @@ init 1 python:
             return None
 
         def msgList(self):
+            print("AppMsgList.msgList")
             result = []
-            sortedTups = sorted(self._contactsM.items())
-            for who, contact in sortedTups:
-                if contact.rx:
-                    result.append((who, contact))
+            if self._contactsM:
+                sortedTups = sorted(self._contactsM.items())
+                for who, contact in sortedTups:
+                    if contact.rx:
+                        print("msgList: add '{}', {}".format(who, contact))
+                        result.append((who, contact))
             return result
 
         # ---------------------------------------------------------------------
