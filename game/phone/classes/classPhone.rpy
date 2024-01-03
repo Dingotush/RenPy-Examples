@@ -47,6 +47,9 @@ init python:
             self._homeAppM = homeApp
             self._appsM = apps
             self._contactsM = contacts
+            # Dimensions
+            self._dimsM = (356, 750)
+            self._ysizeM = 0.7
             # Init apps list.
             if not homeApp in apps:
                 self._appsM.append(homeApp)
@@ -427,6 +430,21 @@ init python:
                 img = app.getStatusImg()
                 if img is not None:
                     result.append(img)
+            return result
+
+        @property
+        def ysize(self):
+            return self._ysizeM
+
+        @property
+        def xsize(self):
+            xdim, ydim = self._dimsM
+            if type(self._ysizeM) is int:
+                result = self._ysizeM * xdim / ydim
+            else:
+                yheight = self._ysizeM * config.screen_height
+                xwidth = yheight * xdim / ydim
+                result = xwidth / config.screen_width
             return result
 
 
