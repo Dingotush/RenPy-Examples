@@ -1,8 +1,21 @@
 #
 # Phone screen
 #
+
+# Transforms.
+#
+# See https://www.renpy.org/doc/html/atl.html#warpers
+#
+transform phoneShowTf:
+    on show:
+        yoffset 1080
+        easein_quad 1.0 yoffset 0
+
+transform phoneHideTf:
+    yoffset 0
+    easeout_quad 1.0 yoffset 1300
+
 transform phoneShowHideTf:
-    # See https://www.renpy.org/doc/html/atl.html#warpers
     on show:
         yoffset 1080
         easein_quad 1.0 yoffset 0
@@ -13,8 +26,8 @@ transform phoneShowHideTf:
 screen phoneScr(phone):
     frame at phoneShowHideTf:
         modal True              # Consume events inside frame
-        xsize 0.25
-        ysize 0.7
+        xsize phone.xsize
+        ysize phone.ysize
         xanchor 0.4
         yanchor 0.5
         xpos 0.3
