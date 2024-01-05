@@ -103,10 +103,20 @@ init python:
             return
 
         def back(self, phone):
+            """
+            Go back to the previous screen.
+            Default behaviour is to return to the app this was launched from, if any.
+            """
             if self._byM is not None:
                 phone.restartApp(self._byM)
 
         def backActive(self):
+            """
+            Should the back button be active?
+            Default behaviour is to enable if this app was launched by another.
+
+            :return:            True if it should be active
+            """
             return self._byM is not None
 
 
@@ -115,17 +125,41 @@ init python:
         # Accessors
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+        @property
+        def appName(self):
+            """
+            Get the internal app name.
+            """
+            return self._nameM
+
         def count(self):
             return 0
 
         def getStatusImg(self):
+            """
+            Get the name of the image to display on the status line if the app
+            has notifications.
+
+            :return:            the name, or None
+            """
             return None
 
         def hasIcon(self):
+            """
+            Does this app have an icon for the home screen?
+
+            :return:            True if it does
+            """
             return self._iconM is not None
 
         def isRunning(self):
+            """
+            Is this app running?
+
+            :return:            True if it is running
+            """
             return self._runningM
+
 
 
         # ---------------------------------------------------------------------
@@ -133,7 +167,17 @@ init python:
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         def __eq__(self, other):
+            """
+            Compare objects for equality.
+
+            :return:            True if they are equal
+            """
             return self._nameM == other._nameM
 
         def __hash__(self):
+            """
+            Generate a hash for this object.
+
+            :return:            the hash
+            """
             return self._nameM.hash()
