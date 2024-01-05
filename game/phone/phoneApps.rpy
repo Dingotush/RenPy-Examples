@@ -2,10 +2,9 @@
 # List of phone apps.
 #
 default phoneApps = [
-    AppHome(),
-    AppContacts(),
-    AppMsgList(),
+    AppContacts,
+    AppMsgList,
 
     # Hidden
-    AppMsgDx(),
+    AppMsgDx,
 ]
