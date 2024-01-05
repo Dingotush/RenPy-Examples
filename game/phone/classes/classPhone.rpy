@@ -43,24 +43,15 @@ init python:
         # Constructor
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-        def __init__(self, homeApp, apps, contacts):
-            self._homeAppM = homeApp
-            self._appsM = apps
-            self._contactsM = contacts
-            # Dimensions
-            self._dimsM = (356, 750)
-            self._ysizeM = 0.7
-            # Init apps list.
-            if not homeApp in apps:
-                self._appsM.append(homeApp)
-            for app in self._appsM:
-                app.register(self)
-            # Owner.
-            self._ownerM = None         # Owner's own contact details.
-            # Msg system.
-            self.msgRxSound = "audio/phone/msg-rx.ogg"
-            self.msgTxSound = "audio/phone/msg-tx.ogg"
-            # Init state.
+        def __init__(self, modelName=None, contacts=None, apps=None):
+            """
+            Initialise a phone.
+
+            :param model:       the phone model
+            :param contacts:    list of contacts
+            :param apps:        list of apps
+            """
+            # Initial state.
             self._openM = False         # Phone screen is open
             self._curAppM = None        # Current application object
             self.appLock = False        # Application locked, player can't use back/home/close
@@ -70,13 +61,110 @@ init python:
             self._powerOnM = False      # Powered on
             self._signalM = 100         # Signal strength
             self.timeStr = "00:00"      # Time of day for status line
+            self._dirtyM = 0            # Dirty count
+            #
+            # Find model information.
+            #
+            self._modelM = None
+            if modelName is not None:
+                self._modelM = phoneModels.get(modelName)
+            if self._modelM is not None:
+                self._modelNameM = modelName
+            else:
+                # Default to the first entry in the model list.
+                self._modelNameM = list(phoneModels)[0]
+                self._modelM = phoneModels.get(self._modelNameM)
+            # 
+            # Absorb model information.
+            #
+            self._dimsM = self._modelM['dims']
+            self._ysizeM = self._modelM['ysize']
+            #
+            # Contacts.
+            #
+            if contacts is not None:
+                self._contactsM = contacts
+            else:
+                self._contactsM = {}
+            #
+            # Init apps list.
+            #
+            self._appsM = []
+            self._homeAppM = self.addApp(self._modelM.get('homeApp', 'AppHome'))
+            self._bootAppM = self.addApp(self._modelM.get('bootApp', None))
+            if apps is None:
+                apps = phoneApps
+            for app in apps:
+                self.addApp(app)
+            #
+            # Owner.
+            #
+            self._ownerM = None         # Owner's own contact details.
+            #
+            # Msg system.
+            #
+            self.msgRxSound = "audio/phone/msg-rx.ogg"
+            self.msgTxSound = "audio/phone/msg-tx.ogg"
+            #
             # Menu interactions.
+            #
             self._inRpMenuM = False     # Choice menu active
             self._menuScannedM = False  # Choice menu entries were scanned
             self._phoneItemsM = []      # Collected phone caption, action pairs
+            #
             # Register phone for filtered Ren'Py mode callbacks.
+            #
             phoneList.append(self)
 
+
+        # ---------------------------------------------------------------------
+        # Applications
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        def addApp(self, app, *args, **kwargs):
+            """
+            Add a new application.
+
+            :param app:         the app name or class
+            """
+            appClass = None
+            appInstance = None
+            if app is None:
+                return
+            if isinstance(app, PhoneApp):
+                appInstance = app
+            else:
+                if type(app) is str:
+                    # If app is a string, get the class instance.
+                    appClass = getattr(renpy.store, app, None)
+                    if appClass is None:
+                        raise ValueError("Unknown application class '{}'.".format(app))
+                elif type(app) is type:
+                    appClass = app
+                else:
+                    raise ValueError("Application class '{}' does not implement PhoneApp.".format(type(app)))
+                # Instantiate
+                appInstance = appClass(*args, **kwargs)
+            self._appsM.append(appInstance)
+            # Register
+            appInstance.register(self)
+            self.dirty()
+            return appInstance
+
+
+
+        def findApp(self, name):
+            """
+            Get an application by name.
+
+            :param name:        the application name
+            :return:            the application object, or None
+            """
+            for app in self._appsM:
+                if app.appName == name:
+                    return app
+            return None
+            
 
 
         # ---------------------------------------------------------------------
@@ -195,11 +283,7 @@ init python:
         def homeActive(self):
             return not self.appLock and self._curAppM is not self._homeAppM
 
-        def findApp(self, name):
-            for app in apps:
-                if app._nameM == name:
-                    return app
-            return None
+
 
         def startApp(self, app, by=None, *args):
             """
@@ -492,8 +576,16 @@ init python:
                 if item.caption == caption:
                     return item.action
             return None
-                
+        
+        # ---------------------------------------------------------------------
+        # Utility.
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+        def dirty(self):
+            """
+            Mark phone state as dirty.
+            """
+            self._dirtyM += 1
 
 
 
