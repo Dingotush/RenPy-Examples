@@ -1,14 +1,8 @@
 label exPhoneSignal:
     $ renpy.dynamic('alex', 'apps', 'appHome', 'contacts', 'msgList', 'mom', 'momMsg', 'phone', 'sis', 'sisMsg')
-    $ appHome = AppHome()
-    $ apps = []
-    $ apps.append(AppContacts())
-    $ apps.append(AppMsgList())
-    $ apps.append(AppMsgDx())
-    $ contacts = {}
-    $ phone = Phone(appHome, apps, contacts)
+    $ phone = Phone()
     $ me = phone.addContactOwner("Me")
-    $ alex = phone.addContact("XAlex")
+    $ alex = phone.addContact("Alex")
     $ mom = phone.addContact("Mom")
     $ sis = phone.addContact("Sis")
     scene bg village

@@ -1,13 +1,8 @@
 
 label exPhone:
     $ renpy.dynamic('apps', 'appHome', 'contacts', 'msgList', 'mom', 'phone', 'sis')
-    $ appHome = AppHome()
-    $ apps = []
-    $ apps.append(AppContacts())
-    $ apps.append(AppMsgList())
-    $ apps.append(AppMsgDx())
     $ contacts = {}
-    $ phone = Phone(appHome, apps, contacts)
+    $ phone = Phone()
     $ me = phone.addContactOwner("Me")
     $ mom = phone.addContact("Mom")
     $ sis = phone.addContact("Sis")
@@ -18,7 +13,6 @@ label exPhone:
     $ msgApp = phone.findApp('msgList')
     $ phone.startApp(msgApp)
     $ msgApp.launchMsg(phone, mom)
-    #$ phone.startApp('msgDx', None, mom)
     $ phone.appLock = True
     $ sis.sms("Can I ask you something?")
     $ mom.sms("Hi")

@@ -1,12 +1,7 @@
 label exPhoneBattery:
     $ renpy.dynamic('apps', 'appHome', 'contacts', 'msgList', 'mom', 'phone', 'sis')
     $ appHome = AppHome()
-    $ apps = []
-    $ apps.append(AppContacts())
-    $ apps.append(AppMsgList())
-    $ apps.append(AppMsgDx())
-    $ contacts = {}
-    $ phone = Phone(appHome, apps, contacts)
+    $ phone = Phone()
     $ me = phone.addContactOwner("Me")
     $ mom = phone.addContact("Mom")
     $ sis = phone.addContact("Sis")
