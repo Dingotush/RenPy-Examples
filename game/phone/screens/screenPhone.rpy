@@ -28,14 +28,13 @@ screen phoneScr(phone):
         modal True              # Consume events inside frame
         xsize phone.xsize
         ysize phone.ysize
-        xanchor 0.4
+        padding phone.padding
+        xanchor 0.5
         yanchor 0.5
-        xpos 0.3
+        xpos 0.25
         ypos 0.4
-        xpadding 14
-        ypadding 14
-        background Frame("images/phone/smartphone-background.png")
-        foreground Frame("images/phone/smartphone-foreground.png")
+        background Frame(phone.modelBackground)
+        foreground Frame(phone.modelForeground)
         if phone.hasPower:
             side "c b":
                 use expression phone.contentScr pass (phone, phone.app)
