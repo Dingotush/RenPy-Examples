@@ -38,6 +38,7 @@ init python:
         """
         Representation of a smart phone.
         """
+        imagePathS = "images/phone/"    # Path to phone images
 
         # ---------------------------------------------------------------------
         # Constructor
@@ -75,10 +76,9 @@ init python:
                 self._modelNameM = list(phoneModels)[0]
                 self._modelM = phoneModels.get(self._modelNameM)
             # 
-            # Absorb model information.
+            # Copy model information.
             #
-            self._dimsM = self._modelM['dims']
-            self._ysizeM = self._modelM['ysize']
+            self.copyModel(self._modelM)
             #
             # Contacts.
             #
@@ -342,6 +342,20 @@ init python:
             for app in self._appsM:
                 app.onPowerOff(self)
 
+        def powerOn(self):
+            """
+            Power on the phone.
+            """
+            # Show boot screen it available.
+            self._curAppM = None
+            self.startApp('boot')
+            # Otherwise straight to home screen.
+            if not self._curAppM:
+                self.home()
+            # Connect to network.
+            self.connect()
+            self._powerOnM = True
+
         def connect(self):
             """
             Phone reconnecting to the network.
@@ -417,6 +431,8 @@ init python:
             self._batteryM = max(0, min(100, int(round(value))))
             if not self.hasPower:
                 self.powerOff()
+            elif self._openM and not self._powerOnM:
+                self.powerOn()
 
         @property
         def batteryImg(self):
@@ -473,6 +489,31 @@ init python:
             if self._phoneItemsM:
                 return ", ".join([item.caption for item in self._phoneItemsM])
             return "None"
+
+        @property
+        def modelBackground(self):
+            """
+            Get the image name to use as the phone background.
+            """
+            return self.imagePathS + self._prefixM + "background.png"
+
+        @property
+        def modelForeground(self):
+            """
+            Get the image name to use as the phone background.
+            """
+            return self.imagePathS + self._prefixM + "foreground.png"
+
+        @property
+        def padding(self):
+            """
+            Get the padding in pixels needed for the phone outline.
+
+            :return:            the padding tuple: left, top, right, bottom
+            """
+            return self._paddingM
+
+
 
         @property
         def rdyChoice(self):
@@ -580,6 +621,16 @@ init python:
         # ---------------------------------------------------------------------
         # Utility.
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        def copyModel(self, model):
+            """
+            Copy information from the phone model.
+            """
+            self._dimsM = model['dims']
+            self._paddingM = model['padding']
+            self._ysizeM = model['ysize']
+            self._prefixM = model['prefix']
+            return
 
         def dirty(self):
             """
