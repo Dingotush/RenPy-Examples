@@ -30,6 +30,8 @@ label .cook:
                 call exFsm from seln_inter_cook_fsm
             "Base FSM Timer":
                 call exFsmTimer from seln_inter_cook_fsm_timer
+            "Timed choice":
+                call exTimedChoice from seln_inter_cook_timed_choice
             "Back":
                 $ done = True
     return
